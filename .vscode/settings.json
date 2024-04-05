@@ -1,0 +1,53 @@
+{
+	// Add a vertical line on the 80 characters limit
+	"editor.rulers": [80],
+
+	// Config Default End Of Line Formatting
+	"files.eol": "\n",
+
+	// Disable Identation Detection,
+	// Because All The Indentations MUST BE
+	// Tabs With 2 Spaces (ﾉ °益°)ﾉ 彡 ┻━┻
+	"editor.detectIndentation": false,
+
+	// ======================= Formatters ===========================
+
+	"[yaml]": {
+		"editor.detectIndentation": true,
+		"editor.insertSpaces": true
+	},
+	"[javascript]": {
+		"editor.defaultFormatter": "dbaeumer.vscode-eslint"
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "dbaeumer.vscode-eslint"
+	},
+	"[javascriptreact]": {
+		"editor.defaultFormatter": "dbaeumer.vscode-eslint"
+	},
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "dbaeumer.vscode-eslint"
+	},
+
+	// ======================= Extentions ===========================
+
+	// Material Icon Theme
+	"material-icon-theme.folders.associations": {
+		"types": "typescript",
+		"dist-lint": "dist"
+	},
+	"material-icon-theme.files.associations": {
+		"tsconfig.lint.json": "tsconfig"
+	},
+	"material-icon-theme.languages.associations": {
+		"env": "tune"
+	},
+
+	// Make ESLint fix all the things that he can on save (like prettier formatting)
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "always"
+	},
+
+	// Code Spell Checker
+	"cSpell.words": ["Econominhas"]
+}
