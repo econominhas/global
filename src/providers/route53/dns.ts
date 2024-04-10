@@ -5,23 +5,24 @@ import {
 } from "aws-cdk-lib/aws-certificatemanager";
 
 import { type BaseResourceInput } from "../types";
-import { getId } from "../utils/id";
+import { getId } from "../../utils/id";
 
 interface DnsInput extends BaseResourceInput {
-	name: string;
-	domain: string;
+	ext: ".com.br" | ".com";
 }
 
 /**
  * Creates a DNS zone with it's ssl certificate
  */
-export const createDns = ({ stack, id, name, domain }: DnsInput) => {
+export const createDns = ({ stack, id, name, ext }: DnsInput) => {
 	const trueId = getId({
 		id,
 		type: "dns",
 		name,
 		omitStage: true, // Root domains should never have stages
 	});
+
+	const domain = `${name}${ext}`;
 
 	const hostedZone = new PublicHostedZone(stack, trueId, {
 		zoneName: domain,
@@ -40,7 +41,7 @@ export const createDns = ({ stack, id, name, domain }: DnsInput) => {
 	};
 };
 
-export const getDns = ({ stack, id, name, domain }: DnsInput) => {
+export const getDns = ({ stack, id, name, ext }: DnsInput) => {
 	const trueId = getId({
 		id,
 		type: "dns",
@@ -49,7 +50,7 @@ export const getDns = ({ stack, id, name, domain }: DnsInput) => {
 	});
 
 	const hostedZone = PublicHostedZone.fromLookup(stack, trueId, {
-		domainName: domain,
+		domainName: `${name}${ext}`,
 	});
 
 	return { hostedZone: hostedZone as PublicHostedZone };

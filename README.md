@@ -21,11 +21,7 @@ As we are a simple startup, with only a few projects and people working on them,
 
 ## Folders and files patterns
 
-We have main folders here: `common` and `projects`.
-
-### common
-
-Generic functions exist to be used to create resources.
+We have main folders inside `src`: `projects` and `providers`.
 
 ### projects
 
@@ -34,19 +30,35 @@ Were the real config exists to create the stacks.
 Inside this folder, we always follow this pattern:
 
 ```
-| projects
-| -- {repository name}	<- Example: "api"
-| -- -- bin.ts 					<- The initializer of the stack
-| -- -- stack.ts				<- The stack config
+| -- projects
+| -- -- {product name}        <- Example: "econominhas"
+| -- -- -- _global            <- General config for this project
+| -- -- -- -- bin.ts          <- The initializer of the stack
+| -- -- -- -- stack.ts        <- The stack config
+| -- -- -- {repository name}  <- Example: "api"
+| -- -- -- -- bin.ts          <- The initializer of the stack
+| -- -- -- -- stack.ts        <- The stack config
+| -- -- -- config.ts          <- Product general config
 ```
 
-We also have the `projects/_global` folder, that has the "global" stack that is used to config things that may be used by all projects.
+`projects/{product name}/_global` has the "global" stack that is used to config things that may be used by all projects.
+
+`projects/{product name}/config.ts` has the general config of the product, this cold be a JSON file, but we decided to keep it as `.ts`.
+
+### providers
+
+Generic functions exist to be used to create resources.
+
+```
+| -- providers
+| -- -- {service name}        <- Example: ec2, rds, route53
+| -- -- -- {sub-product}.ts   <- Sub product of service, ex: instance, database, distribution
+```
 
 ## Useful commands
 
 - `pnpm run build` compile typescript to js
 - `pnpm run watch` watch for changes and compile
-- `pnpm run test` perform the jest unit tests
 - `npx cdk deploy` deploy this stack to your default AWS account/region
 - `npx cdk diff` compare deployed stack with current state
 - `npx cdk synth` emits the synthesized CloudFormation template
