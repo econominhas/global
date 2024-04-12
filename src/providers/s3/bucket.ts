@@ -5,7 +5,7 @@ import { type BaseResourceInput } from "../types";
 
 interface Input extends BaseResourceInput {}
 
-export const createBucket = ({ stack, name, id }: Input) => {
+export const createWebsiteBucket = ({ stack, name, id }: Input) => {
 	const trueId = getId({
 		id,
 		name,

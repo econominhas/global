@@ -8,4 +8,11 @@ import { PROJECT_ID } from "../config";
 
 import { Stack } from "./stack";
 
-new Stack(new App(), `${PROJECT_ID}-${__dirname}`);
+const id = `${PROJECT_ID}-${__dirname}`;
+
+new Stack(new App(), id, {
+	tags: {
+		STAGE: process.env.STAGE,
+		PROJECT: id,
+	},
+});

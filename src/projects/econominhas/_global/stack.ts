@@ -14,19 +14,6 @@ export class Stack extends cdk.Stack {
 
 		/**
 		 * ----------------------------------
-		 * VPC
-		 * ----------------------------------
-		 */
-
-		// Main vpc for the project
-		const { vpc } = createVpc({
-			stack,
-			id,
-			name: "main",
-		});
-
-		/**
-		 * ----------------------------------
 		 * Route53
 		 * ----------------------------------
 		 */
@@ -37,6 +24,19 @@ export class Stack extends cdk.Stack {
 			id,
 			name: PROJECT_ID,
 			ext: ".com.br",
+		});
+
+		/**
+		 * ----------------------------------
+		 * VPC
+		 * ----------------------------------
+		 */
+
+		// Main vpc for the project
+		const { vpc } = createVpc({
+			stack,
+			id,
+			name: "main",
 		});
 
 		/**

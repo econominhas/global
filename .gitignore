@@ -10,3 +10,6 @@ cdk.out
 # Env
 .env*
 !.env.example
+
+# Temporary files
+/tmp

@@ -36,7 +36,7 @@ export const createDatabase = ({ stack, id, name, vpc }: Input) => {
 				subnetType: SubnetType.PRIVATE_ISOLATED,
 			},
 			engine: DatabaseInstanceEngine.postgres({
-				version: PostgresEngineVersion.VER_14,
+				version: PostgresEngineVersion.VER_15,
 			}),
 			instanceType: InstanceType.of(
 				InstanceClass.BURSTABLE3,
@@ -44,7 +44,7 @@ export const createDatabase = ({ stack, id, name, vpc }: Input) => {
 			),
 			credentials: Credentials.fromGeneratedSecret("postgres"),
 			multiAz: false,
-			allocatedStorage: 100,
+			allocatedStorage: 20,
 			maxAllocatedStorage: 120,
 			allowMajorVersionUpgrade: false,
 			autoMinorVersionUpgrade: true,
@@ -54,6 +54,7 @@ export const createDatabase = ({ stack, id, name, vpc }: Input) => {
 			deletionProtection: false,
 			databaseName: name,
 			publiclyAccessible: false,
+			storageEncrypted: true,
 		},
 	);
 
