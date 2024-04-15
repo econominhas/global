@@ -3,8 +3,12 @@ declare global {
 		interface ProcessEnv {
 			STAGE: "dev" | "prod";
 
+			// Aws
 			AWS_ACCOUNT_NUMBER: string;
 			AWS_ACCOUNT_REGION: string;
+
+			// Gcp
+			GCP_REGION: string;
 		}
 	}
 }

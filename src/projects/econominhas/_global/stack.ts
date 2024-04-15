@@ -1,28 +1,23 @@
-import * as cdk from "aws-cdk-lib";
 import { type Construct } from "constructs";
 
-import { createDns } from "../../../providers/route53/dns";
-import { createDatabase } from "../../../providers/rds/database";
 import { PROJECT_ID } from "../config";
-import { createVpc } from "../../../providers/ec2/vpc";
+import { AwsStack } from "../../../clouds/aws/stack";
 
-export class Stack extends cdk.Stack {
-	constructor(scope: Construct, id: string, props?: cdk.StackProps) {
-		super(scope, id, props);
-
-		const stack = this;
+export class Stack extends AwsStack {
+	constructor(stack: Construct, id: string) {
+		super(stack, id);
 
 		/**
 		 * ----------------------------------
-		 * Route53
+		 * DNS
 		 * ----------------------------------
 		 */
 
-		// Main domain for Brazil
-		createDns({
+		this.dns.createMain({
 			stack,
 			id,
 			name: PROJECT_ID,
+			projectId: PROJECT_ID,
 			ext: ".com.br",
 		});
 
@@ -32,25 +27,32 @@ export class Stack extends cdk.Stack {
 		 * ----------------------------------
 		 */
 
-		// Main vpc for the project
-		const { vpc } = createVpc({
+		const { vpc } = this.vpc.createMain({
 			stack,
 			id,
-			name: "main",
+			name: PROJECT_ID,
 		});
 
 		/**
 		 * ----------------------------------
-		 * RDS
+		 * SQL Database
 		 * ----------------------------------
 		 */
 
-		// Main SQL database
-		createDatabase({
+		const { subnets } = this.vpc.getSubnets({
+			stack,
+			id,
+			name: PROJECT_ID,
+			accessibility: "private",
+			vpc,
+		});
+
+		this.sqlDb.createMain({
 			stack,
 			id,
 			name: PROJECT_ID,
 			vpc,
+			subnets,
 		});
 	}
 }

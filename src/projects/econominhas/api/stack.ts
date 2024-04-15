@@ -1,63 +1,44 @@
-import * as cdk from "aws-cdk-lib";
+import { readFileSync } from "fs";
+
 import { type Construct } from "constructs";
 
-import { createARecord } from "../../../providers/route53/record";
-import { getDns } from "../../../providers/route53/dns";
-import { createInstance } from "../../../providers/ec2/instance";
 import { PROJECT_ID } from "../config";
-import { getVpc } from "../../../providers/ec2/vpc";
+import { AwsStack } from "../../../clouds/aws/stack";
 
-export class Stack extends cdk.Stack {
-	constructor(scope: Construct, id: string, props?: cdk.StackProps) {
-		super(scope, id, props);
+export class Stack extends AwsStack {
+	constructor(stack: Construct, id: string) {
+		super(stack, id);
 
-		const stack = this;
-
-		/**
-		 * ----------------------------------
-		 * EC2
-		 * ----------------------------------
-		 */
-
-		const { vpc } = getVpc({
-			stack,
-			id,
-			name: "main",
-		});
-
-		const { ec2Instance } = createInstance({
-			stack,
-			id,
-			name: "api",
-			port: 3000,
-			vpc,
-		});
+		const repository = __dirname;
 
 		/**
 		 * ----------------------------------
-		 * Route 53
+		 * VM
+		 * - exposed to the internet
+		 * - with subdomain
 		 * ----------------------------------
 		 */
 
-		const { hostedZone } = getDns({
-			stack,
+		const vpc = this.vpc.getMainData({
+			id,
+			name: PROJECT_ID,
+		});
+
+		const dns = this.dns.getMainData({
 			id,
 			name: PROJECT_ID,
 			ext: ".com.br",
 		});
 
-		createARecord({
+		this.vm.createPublicWithSubdomain({
 			stack,
 			id,
-			hostedZone,
-			name: "api",
-			target: ec2Instance,
-		});
+			name: repository,
 
-		/**
-		 * ----------------------------------
-		 * CodeDeploy
-		 * ----------------------------------
-		 */
+			subdomain: repository,
+			vpc: vpc as any,
+			dns: dns as any,
+			startupScript: readFileSync("./startup-script.sh").toString("utf8"),
+		});
 	}
 }

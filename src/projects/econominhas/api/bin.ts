@@ -1,8 +1,4 @@
-#!/usr/bin/env node
-
-import "source-map-support/register";
-
-import { App } from "aws-cdk-lib";
+import { App } from "cdktf";
 
 import { PROJECT_ID } from "../config";
 
@@ -10,9 +6,6 @@ import { Stack } from "./stack";
 
 const id = `${PROJECT_ID}-${__dirname}`;
 
-new Stack(new App(), id, {
-	tags: {
-		STAGE: process.env.STAGE,
-		PROJECT: id,
-	},
-});
+const app = new App();
+new Stack(app, id);
+app.synth();

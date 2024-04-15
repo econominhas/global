@@ -1,1 +1,1 @@
-export const PROJECT_ID = "econominhas";
+export const PROJECT_ID = __dirname;
