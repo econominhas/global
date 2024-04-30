@@ -34,7 +34,8 @@
 	// Material Icon Theme
 	"material-icon-theme.folders.associations": {
 		"types": "typescript",
-		"dist-lint": "dist"
+		"dist-lint": "dist",
+		"clouds": "aws"
 	},
 	"material-icon-theme.files.associations": {
 		"tsconfig.lint.json": "tsconfig"

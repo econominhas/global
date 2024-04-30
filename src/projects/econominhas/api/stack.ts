@@ -1,63 +1,39 @@
-import * as cdk from "aws-cdk-lib";
 import { type Construct } from "constructs";
 
-import { createARecord } from "../../../providers/route53/record";
-import { getDns } from "../../../providers/route53/dns";
-import { createInstance } from "../../../providers/ec2/instance";
-import { PROJECT_ID } from "../config";
-import { getVpc } from "../../../providers/ec2/vpc";
+import { AwsStack } from "../../../clouds/aws/stack";
 
-export class Stack extends cdk.Stack {
+import type * as cdk from "aws-cdk-lib";
+
+export class Stack extends AwsStack {
 	constructor(scope: Construct, id: string, props?: cdk.StackProps) {
 		super(scope, id, props);
 
 		const stack = this;
+		const name = __dirname;
 
 		/**
 		 * ----------------------------------
-		 * EC2
+		 * Service User for deploy
 		 * ----------------------------------
 		 */
 
-		const { vpc } = getVpc({
+		const { user } = this.serviceUser.createUser({
 			stack,
 			id,
-			name: "main",
-		});
-
-		const { ec2Instance } = createInstance({
-			stack,
-			id,
-			name: "api",
-			port: 3000,
-			vpc,
+			name,
 		});
 
 		/**
 		 * ----------------------------------
-		 * Route 53
+		 * Container Registry for Docker images
 		 * ----------------------------------
 		 */
 
-		const { hostedZone } = getDns({
+		this.containerRegistry.createRegistry({
 			stack,
 			id,
-			name: PROJECT_ID,
-			ext: ".com.br",
+			name,
+			serviceUser: user,
 		});
-
-		createARecord({
-			stack,
-			id,
-			hostedZone,
-			name: "api",
-			target: ec2Instance,
-		});
-
-		/**
-		 * ----------------------------------
-		 * CodeDeploy
-		 * ----------------------------------
-		 */
 	}
 }
